@@ -1,3 +1,0 @@
-﻿将OfficeControl.cab解压到c盘：
-regsvr32 c:\OfficeControl.ocx  注册
-  

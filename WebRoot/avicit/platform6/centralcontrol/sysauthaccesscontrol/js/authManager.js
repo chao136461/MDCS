@@ -1,1 +1,0 @@
-$(function(){var a=$(".panel-icon");if(a){a.each(function(b){this.style.marginTop="-11px"})}});
