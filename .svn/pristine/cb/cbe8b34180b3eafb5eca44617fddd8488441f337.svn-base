@@ -1,0 +1,597 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib prefix="sec" uri="/WEB-INF/tags/shiro.tld"%>
+<%@taglib prefix="pt6" uri="/WEB-INF/tags/platform6.tld"%>
+<%@ page import="avicit.platform6.commons.utils.ViewUtil"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<!-- ControllerPath = "discussion_manage/structuralrelationship/StructuralRelationshipController/StructuralRelationshipInfo" -->
+<title>tree</title>
+<base href="<%=ViewUtil.getRequestPath(request)%>">
+<%
+	String strid = request.getParameter("id") == null ? "" : request
+			.getParameter("id");
+%>
+</head>
+<jsp:include
+	page="/avicit/platform6/component/common/EasyUIJsInclude.jsp"></jsp:include>
+<jsp:include
+	page="/avicit/discussion_manage/structuralrelationship/ztreeLayuiInclude.jsp"></jsp:include>
+<style>
+
+/**mainSection*/
+
+.mainSection{
+	width: 100%;
+	height: 25px;
+	padding-top: 10px;
+	padding-left: 10px;
+	margin-bottom: 0px;
+	font-size: 13px;
+	position: relative;
+}
+.screening {
+	margin-left:10px;
+    margin-top:0px;
+    font-size: 12px;
+    -webkit-user-select: none;
+}
+
+.addLabel {
+	position: absolute;
+	top: 31px;
+	left: 70px;
+	display: none;
+	width: 150px;
+	height: auto;
+	box-shadow: 0px 0px 5px #dddddd;
+	border: 1px solid #dddddd;
+}
+
+.addLabelList {
+	position: absolute;
+	width: 150px;
+	height: auto;
+	background-color: #FFFFFF;
+	z-index: 99;
+	text-align: left;
+}
+
+.addLabelList ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	width: 100%;
+	box-shadow: 0px 0px 5px #dddddd;
+	border: 1px solid #dddddd;
+}
+
+.addLabelList ul li {
+	padding: 5px 10px 5px 10px;
+	list-style: none;
+	cursor: pointer;
+	font-size: 12px;
+	border-bottom: 1px solid #f7f7f7;
+	-webkit-user-select: none;
+}
+
+.addLabelList ul li.active { /*鼠标移动上去背景色  */
+	background: #2ea7e0;
+}
+
+.addLabelList ul li:hover {
+	background: #2ea7e0;
+	color: #FFFFFF;
+}
+
+.mainSection > .screening > span {
+ 	margin-left:3px;
+    background-color: #ffffff;
+    padding: 5px 20px 5px 15px;
+    position: relative;
+    color: #666666;
+    cursor: pointer;
+    font-size: 12px;
+    border: 1px solid #e9e9e9;
+    -webkit-user-select: none;
+}
+.sx_ {
+    width: 10px;
+    height: 10px;
+    display: block;
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    font-size: 10px;
+    color: #999999;
+}
+*::before, *::after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.mainSection>.screening>span:hover {
+    border: 1px solid #2ea7e0;
+}
+
+.mainSection>.screening>.mainSectionBtn :hover {
+    border: 1px solid #2ea7e0;
+}
+
+.mainSectionBtn {
+    background-color: #ffffff;
+    outline: none;
+    display: inline-block;
+    color: #b5b5b5;
+    cursor: pointer;
+    position: absolute;
+    border: 1px solid #e9e9e9;
+}
+.label {
+    outline: none;
+    display: inline-block;
+    font-size:15px;
+}
+</style>
+<script type="text/javascript">
+	 var strid ='<%=strid%>';
+	var setting = {
+		async : {
+			autoParam : [ "id" ],
+			dataType : "json",
+			enable : true,
+			type : "get",
+			url : "platform/discussion_manage/structuralrelationship/StructuralRelationshipController/searchVciZtreeByStrId/"
+					+ strid,
+		},
+		data : {
+			simpleData : {
+				enable : true
+			}
+		},
+		callback : {
+			onClick : zTreeOnClick,
+		}
+	};
+	function getFont(treeId, node) {
+		return node.font ? node.font : {};
+	}
+
+	//初始化树
+	$(function() {
+		var arr=[]; 
+		var arrName=[]; 
+		$.fn.zTree.init($("#tree"), setting);
+		setTimeout(selectNodeById, 100);
+		findDiscussionDate();
+		
+			$(document).on('click', '.addLabelList li', function(e) {
+			if ($(".mainSection .screening span").length > 2) {
+				  $.messager.alert('警告','最多可添加3类状态');  
+			    return;
+			  }
+			  var thisLi = $(this);
+			  var bol = true;
+			  $(".mainSection .screening span").each(function() {
+			    if ($(this).html() == thisLi.html()) {
+			      bol = false;
+			      return;
+			    }
+			  });
+			  if (bol) {
+			    $(".addLabel").after("<span val=\"" + $(this).attr("val") + "\">" + $(this).html() +"<span class=\"sx_\">X</span>" +"</span> ");
+			   // arr.push($(this).attr("val"));
+			    //arrName.push($(this).html());
+			   // localStorage.labelList = arr.join(",");
+			    ///localStorage.labelListName = arrName.join(",");
+			    //initLoadData();
+			  }
+			  $(".addLabel").css("display", "none");
+			});
+		
+		$(document).on('click', '.mainSection .screening span', function(e) {
+			  var str = $(this).attr("val");
+			  $(this).remove();
+			  /*
+			  for (var i in arr) {
+			    if (arr[i] == str) {
+			      arr.remove(i);
+			      arrName.remove(i);
+			    }
+			  }
+			  localStorage.labelList = arr.join(",");
+			  localStorage.labelListName = arrName.join(",");
+			  initLoadData();*/
+			});
+	});
+
+	//选中节点
+	function selectNodeById() {
+		var zTree = $.fn.zTree.getZTreeObj("tree");
+		var selecrNode = zTree.getNodeByParam("id", strid);
+		zTree.selectNode(selecrNode);
+	};
+
+	//初始化datagrid
+	function findDiscussionDate() {
+		$("#dgDiscussion")
+				.datagrid(
+						{
+							url : 'platform/discussion_manage/discussionmanage/DiscussionManageController/selectDiscussionData/'
+									+ strid
+						});
+	};
+
+	//获取选择节点数据
+	var selectNode = null;
+	function zTreeOnClick(event, treeId, treeNode) {
+		getDgStructuralRelationship(treeNode.id);
+		selectNode = treeNode;
+	};
+	function formateDate(value, row, index) {
+		return formate(value);
+	}
+	function formate(value) {
+		if (value) {
+			return new Date(value).format("yyyy-MM-dd");
+		}
+		return '';
+	};
+	var json = [ {
+		"id" : 1,
+		"code" : "重量",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 1,
+		"code" : "重量",
+		"jianyi" : "太重",
+		"user" : "王五",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 3,
+		"code" : "重量",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 4,
+		"code" : "材料",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 5,
+		"code" : "材料",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 6,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 7,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 8,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 9,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 12,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 13,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 14,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	}, {
+		"id" : 15,
+		"code" : "装配",
+		"jianyi" : "太重",
+		"user" : "张三",
+		"time" : "2017-2-3",
+		"number" : 3,
+		"state" : "关闭"
+	} ];
+
+	$.extend($.fn.datagrid.methods, {
+
+		autoMergeCells : function(jq, fields) {
+
+			return jq.each(function() {
+
+				var target = $(this);
+
+				if (!fields) {
+
+					fields = target.datagrid("getColumnFields");
+
+				}
+
+				var rows = target.datagrid("getRows");
+
+				var i = 0,
+
+				j = 0,
+
+				temp = {};
+
+				for (i; i < rows.length; i++) {
+
+					var row = rows[i];
+
+					j = 0;
+
+					for (j; j < fields.length; j++) {
+
+						var field = fields[j];
+
+						var tf = temp[field];
+
+						if (!tf) {
+
+							tf = temp[field] = {};
+
+							tf[row[field]] = [ i ];
+
+						} else {
+
+							var tfv = tf[row[field]];
+
+							if (tfv) {
+
+								tfv.push(i);
+
+							} else {
+
+								tfv = tf[row[field]] = [ i ];
+
+							}
+
+						}
+					}
+
+				}
+
+				$.each(temp, function(field, colunm) {
+
+					$.each(colunm, function() {
+
+						var group = this;
+
+						if (group.length > 1) {
+
+							var before,
+
+							after,
+
+							megerIndex = group[0];
+
+							for ( var i = 0; i < group.length; i++) {
+
+								before = group[i];
+
+								after = group[i + 1];
+
+								if (after && (after - before) == 1) {
+
+									continue;
+
+								}
+
+								var rowspan = before - megerIndex + 1;
+
+								if (rowspan > 1) {
+
+									target.datagrid('mergeCells', {
+
+										index : megerIndex,
+
+										field : field,
+
+										rowspan : rowspan
+
+									});
+
+								}
+
+								if (after && (after - before) != 1) {
+
+									megerIndex = after;
+
+								}
+
+							}
+
+						}
+
+					});
+
+				});
+
+			});
+
+		}
+
+	});
+	 /*合并相同单元格  */
+	function onLoads() {
+		$("#tables").datagrid('autoMergeCells', [ "code" ]);
+	};
+	/*设为争议  */
+	function zhengyi() {
+		var ro = $("#tables").datagrid('getSelected');
+		ro.jianyi = ro.jianyi + "<span class=\"badge badge-danger\">争议</span>";
+		$("#tables").datagrid('refreshRow', 1);
+		onLoads();
+	};
+	
+	function forum(code){
+		var url = 'avicit/discussion_manage/discussionmanage/ForumManage.jsp?code='+code;
+		if(typeof(top.addTab) != 'undefined'){
+			top.addTab("建议详情", url);
+		}else{
+			window.open(url);
+		}
+	};
+	function forummanage(value, row, inde) {
+		return '<a href="javascript:void(0);" onclick="forum(\''
+				+ row.id + '\');">' + value + '</a>';
+	};
+	
+		
+		/*点击按钮控制下拉框显示  */
+		function choose() {
+			var dis = $(".addLabel").css("display");
+			if (dis == "none") {
+				$(".addLabel").css("display", "block");
+				window.setTimeout(function() {
+				      $("body").click(function() {
+				        $(".addLabel").css("display", "none");
+				        $("body").unbind("click");
+				      });
+				    }, 10);
+			} else {
+				$(".addLabel").css("display", "none");
+			}
+		};
+</script>
+
+</head>
+<body class="easyui-layout" fit="true">
+	<div data-options="region:'west',split:true,title:'vci树结构'"
+		style="width: 250px" <ul id="tree" class="ztree"></ul></div>
+	<div data-options="region:'center',split:true"
+		style="padding: 0px; overflow: auto;">
+		<div id="tt" class="easyui-tabs"
+			style="padding: 0px;" data-options="fit:true">
+			<div title="讨论区" data-options="iconCls:'icon-filter',closable:true,closable:false"
+				style="overflow: auto; style="padding: 0px;">
+				<div id="toolbarStructureManage" class="datagrid-toolbar">
+					<div class="mainSection">
+						<div class="screening">
+<!-- 							<a id="state-btn" class="easyui-linkbutton" -->
+<!-- 								data-options="iconCls:'icon-add',iconAlign:'right'" plain="true" -->
+<!-- 								href="javascript:void(0);" onclick="choose();">状态筛选</a> -->
+
+							<label class="label">专业筛选:</label>
+							<button class="mainSectionBtn" onclick="choose()" ><img ismap src="static/images/platform/common/icons/text_list_bullets.png"></button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+							<div class="addLabel">
+								<div class="addLabelList" style="width: 150px;">
+									<ul>
+										<li val="0">重量</li>
+
+										<li val="1">材料</li>
+
+										<li val="2">装配</li>
+										
+										<li val="3">冶金</li>
+										
+										<li val="4">标准化</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<table id="tables" class="easyui-datagrid"
+					data-options="fit:true,
+					data:json,
+					idField:'id',
+					border: false,
+					rownumbers: true,
+					animate: true,
+					collapsible: false,
+					fitColumns: true,
+					autoRowHeight: false,
+					toolbar:'#toolbarStructureManage',
+					singleSelect: true,
+					checkOnSelect: true,
+					selectOnCheck: false,
+					onLoadSuccess: onLoads,
+					pagination:true,
+					pageSize:dataOptions.pageSize,
+					pageList:dataOptions.pageList,
+					striped:false">
+					<thead>
+						<tr>
+							<th data-options="field:'id',width:200,hidden:true">id</th>
+							<th data-options="field:'code',width:200,align:'center'">部门</th>
+							<th data-options="field:'jianyi',width:200,align:'center',formatter:forummanage">建议</th>
+							<th data-options="field:'user',width:200,align:'center'">发表人</th>
+							<th data-options="field:'time',width:200,align:'center'">发表时间</th>
+							<th data-options="field:'number',width:200,align:'center'">回复数量</th>
+							<th data-options="field:'state',width:200,align:'center'">状态</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+			<div title="模型质量检查" data-options="iconCls:'icon-search',closable:true,closable:false"
+				style="overflow: auto; padding: 20px;">
+				<span class="badge badge-danger">争议</span>
+			</div>
+			<div title="模型干涉检查"
+				data-options="iconCls:'icon-reload',closable:true,closable:false"
+				style="overflow: auto; padding: 20px;">
+				<div class="sss">
+				</div>
+				</div>
+		</div>
+
+	</div>
+</body>
+</html>

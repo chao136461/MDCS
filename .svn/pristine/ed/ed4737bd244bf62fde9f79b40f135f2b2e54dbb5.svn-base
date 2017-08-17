@@ -1,0 +1,107 @@
+package avicit.discussion_manage.processassignment.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import avicit.platform6.core.mybatis.MyBatisRepository;
+import org.apache.ibatis.annotations.Param;
+import avicit.platform6.core.sfn.intercept.SelfDefined;
+import avicit.platform6.core.mybatis.pagehelper.Page;
+import avicit.discussion_manage.processassignment.dto.ProcessAssignmentDTO;
+import avicit.discussion_manage.processassignment.dto.TreeProcessNodesDTO;
+
+/**
+ * @classname: ProcessAssignmentDao
+ * @description: 定义 工艺分工人员任务表 持久层 接口 通过@MapperScannerConfigurer扫描目录中的所有接口,
+ *               动态在Spring Context中生成实现. 方法名称必须与Mapper.xml中保持一致.
+ * @author: AVICIT DEV
+ */
+@MyBatisRepository
+public interface ProcessAssignmentDao {
+
+	/**
+	 * @author AVICIT DEV
+	 * @description: 分页查询 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param searchParams
+	 * @return
+	 */
+	public Page<ProcessAssignmentDTO> searchProcessAssignmentByPage(
+			@Param("bean") ProcessAssignmentDTO processAssignmentDTO,
+			@Param("sfnConditions") SelfDefined sql);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description:查询对象 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param searchParams
+	 * @return
+	 */
+	public List<ProcessAssignmentDTO> searchProcessAssignment(
+			ProcessAssignmentDTO processAssignmentDTO);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description:查询对象 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param id
+	 * @return
+	 */
+	public ProcessAssignmentDTO findProcessAssignmentById(String id);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description: 新增对象 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param paramMap
+	 * @return
+	 */
+	public int insertProcessAssignment(ProcessAssignmentDTO processAssignmentDTO);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description: 更新对象 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param paramMap
+	 */
+	public int updateProcessAssignmentSensitive(
+			ProcessAssignmentDTO processAssignmentDTO);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description: 更新对象 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param paramMap
+	 */
+	public int updateProcessAssignmentAll(
+			ProcessAssignmentDTO processAssignmentDTO);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description: 按主键删除 工艺分工人员任务表
+	 * @date 2014-12-26 11:13:20
+	 * @param ids
+	 * @return
+	 */
+	public int deleteProcessAssignmentById(String id);
+
+	/**
+	 * @author wuc
+	 * @description: 按零件ID查找工艺分工人员任务
+	 * @date 2017年6月22日 16:31:53
+	 * @param sid
+	 * @return
+	 */
+	public ProcessAssignmentDTO findProcessAssignmentBySid(String sid);
+
+	/**
+	 * @author AVICIT DEV
+	 * @description: 按照父id查询数据
+	 * @date 2017年6月26日 17:11:11
+	 * @param searchParams
+	 * @return
+	 */
+
+	public List<TreeProcessNodesDTO> gettreeProcessassignmentByStrId(
+			String parentId);
+}

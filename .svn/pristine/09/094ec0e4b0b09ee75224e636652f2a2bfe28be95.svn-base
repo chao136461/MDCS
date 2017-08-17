@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="avicit.discussion_manage.disputememo.dao.DisputeMemoDao">
+
+<resultMap id="DisputeMemoDTOMap" type="avicit.discussion_manage.disputememo.dto.DisputeMemoDTO">
+		<result property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="proId" column="PRO_ID" jdbcType="VARCHAR" />
+		<result property="disText" column="DIS_TEXT" jdbcType="VARCHAR" />
+		<result property="sendTo" column="SEND_TO" jdbcType="VARCHAR" />
+		<result property="createdBy" column="CREATED_BY" jdbcType="VARCHAR" />
+		<result property="creationDate" column="CREATION_DATE" jdbcType="TIMESTAMP" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" jdbcType="VARCHAR" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" />
+		<result property="lastUpdateIp" column="LAST_UPDATE_IP" jdbcType="VARCHAR" />
+		<result property="version" column="VERSION" jdbcType="DECIMAL" />
+		<result property="attribute01" column="ATTRIBUTE_01" jdbcType="VARCHAR" />
+		<result property="attribute02" column="ATTRIBUTE_02" jdbcType="VARCHAR" />
+		<result property="attribute03" column="ATTRIBUTE_03" jdbcType="VARCHAR" />
+		<result property="attribute04" column="ATTRIBUTE_04" jdbcType="VARCHAR" />
+		<result property="attribute05" column="ATTRIBUTE_05" jdbcType="VARCHAR" />
+		<result property="attribute06" column="ATTRIBUTE_06" jdbcType="VARCHAR" />
+		<result property="attribute07" column="ATTRIBUTE_07" jdbcType="TIMESTAMP" />
+		<result property="attribute08" column="ATTRIBUTE_08" jdbcType="TIMESTAMP" />
+		<result property="attribute09" column="ATTRIBUTE_09" jdbcType="DECIMAL" />
+		<result property="attribute10" column="ATTRIBUTE_10" jdbcType="DECIMAL" />
+</resultMap>
+<!-- 分页查询 DISPUTE_MEMO -->
+<select id="searchDisputeMemoByPage" parameterType="java.util.Map" resultMap="DisputeMemoDTOMap">
+	select
+		t1.id                             ,
+		t1.pro_id                         ,
+		t1.dis_text                       ,
+		t1.send_to                        ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10                   
+	from dispute_memo 	t1
+		<where>
+			<if test="bean != null">
+			<if test="bean.id != null and bean.id != ''">
+				and t1.ID like '%'||#{bean.id}||'%'
+			</if>
+			<if test="bean.proId != null and bean.proId != ''">
+				and t1.PRO_ID like '%'||#{bean.proId}||'%'
+			</if>
+			<if test="bean.disText != null and bean.disText != ''">
+				and t1.DIS_TEXT like '%'||#{bean.disText}||'%'
+			</if>
+			<if test="bean.sendTo != null and bean.sendTo != ''">
+				and t1.SEND_TO like '%'||#{bean.sendTo}||'%'
+			</if>
+			<if test="bean.createdBy != null and bean.createdBy != ''">
+				and t1.CREATED_BY like '%'||#{bean.createdBy}||'%'
+			</if>
+			<if test="bean.creationDate != null and bean.creationDate != ''">
+				and t1.CREATION_DATE like '%'||#{bean.creationDate}||'%'
+			</if>
+			<if test="bean.lastUpdatedBy != null and bean.lastUpdatedBy != ''">
+				and t1.LAST_UPDATED_BY like '%'||#{bean.lastUpdatedBy}||'%'
+			</if>
+			<if test="bean.lastUpdateDate != null and bean.lastUpdateDate != ''">
+				and t1.LAST_UPDATE_DATE like '%'||#{bean.lastUpdateDate}||'%'
+			</if>
+			<if test="bean.lastUpdateIp != null and bean.lastUpdateIp != ''">
+				and t1.LAST_UPDATE_IP like '%'||#{bean.lastUpdateIp}||'%'
+			</if>
+			<if test="bean.version != null and bean.version != ''">
+				and t1.VERSION like '%'||#{bean.version}||'%'
+			</if>
+			<if test="bean.attribute01 != null and bean.attribute01 != ''">
+				and t1.ATTRIBUTE_01 like '%'||#{bean.attribute01}||'%'
+			</if>
+			<if test="bean.attribute02 != null and bean.attribute02 != ''">
+				and t1.ATTRIBUTE_02 like '%'||#{bean.attribute02}||'%'
+			</if>
+			<if test="bean.attribute03 != null and bean.attribute03 != ''">
+				and t1.ATTRIBUTE_03 like '%'||#{bean.attribute03}||'%'
+			</if>
+			<if test="bean.attribute04 != null and bean.attribute04 != ''">
+				and t1.ATTRIBUTE_04 like '%'||#{bean.attribute04}||'%'
+			</if>
+			<if test="bean.attribute05 != null and bean.attribute05 != ''">
+				and t1.ATTRIBUTE_05 like '%'||#{bean.attribute05}||'%'
+			</if>
+			<if test="bean.attribute06 != null and bean.attribute06 != ''">
+				and t1.ATTRIBUTE_06 like '%'||#{bean.attribute06}||'%'
+			</if>
+			<if test="bean.attribute07 != null and bean.attribute07 != ''">
+				and t1.ATTRIBUTE_07 like '%'||#{bean.attribute07}||'%'
+			</if>
+			<if test="bean.attribute08 != null and bean.attribute08 != ''">
+				and t1.ATTRIBUTE_08 like '%'||#{bean.attribute08}||'%'
+			</if>
+			<if test="bean.attribute09 != null and bean.attribute09 != ''">
+				and t1.ATTRIBUTE_09 like '%'||#{bean.attribute09}||'%'
+			</if>
+			<if test="bean.attribute10 != null and bean.attribute10 != ''">
+				and t1.ATTRIBUTE_10 like '%'||#{bean.attribute10}||'%'
+			</if>
+			</if>
+			<if test="sfnConditions != null and sfnConditions.sql != ''">
+				and ${sfnConditions.sql}			
+			</if>
+		</where>
+			order by t1.creation_date desc
+</select>
+<!-- 查询列表 DISPUTE_MEMO -->
+<select id="searchDisputeMemo" parameterType="java.util.Map" resultMap="DisputeMemoDTOMap">
+	select
+		t1.id                             ,
+		t1.pro_id                         ,
+		t1.dis_text                       ,
+		t1.send_to                        ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10                   
+	from dispute_memo 	t1
+		<where>
+			<if test="id != null and id != ''">
+				and t1.ID =#{id}
+			</if>
+			<if test="proId != null and proId != ''">
+				and t1.PRO_ID =#{proId}
+			</if>
+			<if test="disText != null and disText != ''">
+				and t1.DIS_TEXT =#{disText}
+			</if>
+			<if test="sendTo != null and sendTo != ''">
+				and t1.SEND_TO =#{sendTo}
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				and t1.CREATED_BY =#{createdBy}
+			</if>
+			<if test="creationDate != null and creationDate != ''">
+				and t1.CREATION_DATE =#{creationDate}
+			</if>
+			<if test="lastUpdatedBy != null and lastUpdatedBy != ''">
+				and t1.LAST_UPDATED_BY =#{lastUpdatedBy}
+			</if>
+			<if test="lastUpdateDate != null and lastUpdateDate != ''">
+				and t1.LAST_UPDATE_DATE =#{lastUpdateDate}
+			</if>
+			<if test="lastUpdateIp != null and lastUpdateIp != ''">
+				and t1.LAST_UPDATE_IP =#{lastUpdateIp}
+			</if>
+			<if test="version != null and version != ''">
+				and t1.VERSION =#{version}
+			</if>
+			<if test="attribute01 != null and attribute01 != ''">
+				and t1.ATTRIBUTE_01 =#{attribute01}
+			</if>
+			<if test="attribute02 != null and attribute02 != ''">
+				and t1.ATTRIBUTE_02 =#{attribute02}
+			</if>
+			<if test="attribute03 != null and attribute03 != ''">
+				and t1.ATTRIBUTE_03 =#{attribute03}
+			</if>
+			<if test="attribute04 != null and attribute04 != ''">
+				and t1.ATTRIBUTE_04 =#{attribute04}
+			</if>
+			<if test="attribute05 != null and attribute05 != ''">
+				and t1.ATTRIBUTE_05 =#{attribute05}
+			</if>
+			<if test="attribute06 != null and attribute06 != ''">
+				and t1.ATTRIBUTE_06 =#{attribute06}
+			</if>
+			<if test="attribute07 != null and attribute07 != ''">
+				and t1.ATTRIBUTE_07 =#{attribute07}
+			</if>
+			<if test="attribute08 != null and attribute08 != ''">
+				and t1.ATTRIBUTE_08 =#{attribute08}
+			</if>
+			<if test="attribute09 != null and attribute09 != ''">
+				and t1.ATTRIBUTE_09 =#{attribute09}
+			</if>
+			<if test="attribute10 != null and attribute10 != ''">
+				and t1.ATTRIBUTE_10 =#{attribute10}
+			</if>
+		</where>
+</select>
+<!-- 主键查询对象 DISPUTE_MEMO -->
+<select id="findDisputeMemoById" parameterType="java.util.Map" resultMap="DisputeMemoDTOMap">
+	select
+		t1.id                             ,
+		t1.pro_id                         ,
+		t1.dis_text                       ,
+		t1.send_to                        ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10                   
+	from dispute_memo 	t1
+		where t1.id = #{id}
+</select>
+<!-- 外键查询对象 DISPUTE_MEMO -->
+<select id="queryDisputeMemoByFrenKey" parameterType="java.util.Map" resultMap="DisputeMemoDTOMap">
+	select
+		t1.id                             ,
+		t1.pro_id                         ,
+		t1.dis_text                       ,
+		t1.send_to                        ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10                   
+	from dispute_memo 	t1
+		where t1.pro_id = #{id}
+</select>
+<!-- 新增对象 DISPUTE_MEMO -->
+<insert id="insertDisputeMemo" parameterType="avicit.discussion_manage.disputememo.dto.DisputeMemoDTO">
+	insert into dispute_memo
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="proId != null">
+				pro_id,
+			</if>
+			<if test="disText != null">
+				dis_text,
+			</if>
+			<if test="sendTo != null">
+				send_to,
+			</if>
+			<if test="createdBy != null">
+				created_by,
+			</if>
+			<if test="creationDate != null">
+				creation_date,
+			</if>
+			<if test="lastUpdatedBy != null">
+				last_updated_by,
+			</if>
+			<if test="lastUpdateDate != null">
+				last_update_date,
+			</if>
+			<if test="lastUpdateIp != null">
+				last_update_ip,
+			</if>
+			<if test="version != null">
+				version,
+			</if>
+			<if test="attribute01 != null">
+				attribute_01,
+			</if>
+			<if test="attribute02 != null">
+				attribute_02,
+			</if>
+			<if test="attribute03 != null">
+				attribute_03,
+			</if>
+			<if test="attribute04 != null">
+				attribute_04,
+			</if>
+			<if test="attribute05 != null">
+				attribute_05,
+			</if>
+			<if test="attribute06 != null">
+				attribute_06,
+			</if>
+			<if test="attribute07 != null">
+				attribute_07,
+			</if>
+			<if test="attribute08 != null">
+				attribute_08,
+			</if>
+			<if test="attribute09 != null">
+				attribute_09,
+			</if>
+			<if test="attribute10 != null">
+				attribute_10,
+			</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="proId != null">
+				#{proId,jdbcType=VARCHAR},
+			</if>
+			<if test="disText != null">
+				#{disText,jdbcType=VARCHAR},
+			</if>
+			<if test="sendTo != null">
+				#{sendTo,jdbcType=VARCHAR},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="creationDate != null">
+				#{creationDate},
+			</if>
+			<if test="lastUpdatedBy != null">
+				#{lastUpdatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateDate != null">
+				#{lastUpdateDate},
+			</if>
+			<if test="lastUpdateIp != null">
+				#{lastUpdateIp,jdbcType=VARCHAR},
+			</if>
+			<if test="version != null">
+				#{version,jdbcType=DECIMAL},
+			</if>
+			<if test="attribute01 != null">
+				#{attribute01,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute02 != null">
+				#{attribute02,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute03 != null">
+				#{attribute03,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute04 != null">
+				#{attribute04,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute05 != null">
+				#{attribute05,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute06 != null">
+				#{attribute06,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute07 != null">
+				#{attribute07,jdbcType=DATE},
+			</if>
+			<if test="attribute08 != null">
+				#{attribute08,jdbcType=DATE},
+			</if>
+			<if test="attribute09 != null">
+				#{attribute09,jdbcType=DECIMAL},
+			</if>
+			<if test="attribute10 != null">
+				#{attribute10,jdbcType=DECIMAL},
+			</if>
+	</trim>
+</insert>
+<!-- 更新对象 DISPUTE_MEMO -->
+<update id="updateDisputeMemoSensitive" parameterType="avicit.discussion_manage.disputememo.dto.DisputeMemoDTO">
+	update dispute_memo t1
+	<set>
+			<if test="id != null">
+				t1.id                             =#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="proId != null">
+				t1.pro_id                         =#{proId,jdbcType=VARCHAR},
+			</if>
+			<if test="disText != null">
+				t1.dis_text                       =#{disText,jdbcType=VARCHAR},
+			</if>
+			<if test="sendTo != null">
+				t1.send_to                        =#{sendTo,jdbcType=VARCHAR},
+			</if>
+			<if test="createdBy != null">
+				t1.created_by                     =#{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="creationDate != null">
+				t1.creation_date                  =#{creationDate},
+			</if>
+			<if test="lastUpdatedBy != null">
+				t1.last_updated_by                =#{lastUpdatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateDate != null">
+				t1.last_update_date               =#{lastUpdateDate},
+			</if>
+			<if test="lastUpdateIp != null">
+				t1.last_update_ip                 =#{lastUpdateIp,jdbcType=VARCHAR},
+			</if>
+			<if test="version != null">
+				t1.version                        =t1.version+1,
+			</if>
+			<if test="attribute01 != null">
+				t1.attribute_01                   =#{attribute01,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute02 != null">
+				t1.attribute_02                   =#{attribute02,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute03 != null">
+				t1.attribute_03                   =#{attribute03,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute04 != null">
+				t1.attribute_04                   =#{attribute04,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute05 != null">
+				t1.attribute_05                   =#{attribute05,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute06 != null">
+				t1.attribute_06                   =#{attribute06,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute07 != null">
+				t1.attribute_07                   =#{attribute07,jdbcType=DATE},
+			</if>
+			<if test="attribute08 != null">
+				t1.attribute_08                   =#{attribute08,jdbcType=DATE},
+			</if>
+			<if test="attribute09 != null">
+				t1.attribute_09                   =#{attribute09,jdbcType=DECIMAL},
+			</if>
+			<if test="attribute10 != null">
+				t1.attribute_10                   =#{attribute10,jdbcType=DECIMAL},
+			</if>
+	</set>
+		where t1.id = #{id} and t1.version =#{version}
+</update>
+<!-- 更新对象 DISPUTE_MEMO -->
+<update id="updateDisputeMemoAll" parameterType="avicit.discussion_manage.disputememo.dto.DisputeMemoDTO">
+	update dispute_memo t1
+		set
+			t1.id                             =#{id,jdbcType=VARCHAR},
+			t1.pro_id                         =#{proId,jdbcType=VARCHAR},
+			t1.dis_text                       =#{disText,jdbcType=VARCHAR},
+			t1.send_to                        =#{sendTo,jdbcType=VARCHAR},
+			t1.created_by                     =#{createdBy,jdbcType=VARCHAR},
+			t1.creation_date                  =#{creationDate},
+			t1.last_updated_by                =#{lastUpdatedBy,jdbcType=VARCHAR},
+			t1.last_update_date               =#{lastUpdateDate},
+			t1.last_update_ip                 =#{lastUpdateIp,jdbcType=VARCHAR},
+			t1.version                        =t1.version+1,
+			t1.attribute_01                   =#{attribute01,jdbcType=VARCHAR},
+			t1.attribute_02                   =#{attribute02,jdbcType=VARCHAR},
+			t1.attribute_03                   =#{attribute03,jdbcType=VARCHAR},
+			t1.attribute_04                   =#{attribute04,jdbcType=VARCHAR},
+			t1.attribute_05                   =#{attribute05,jdbcType=VARCHAR},
+			t1.attribute_06                   =#{attribute06,jdbcType=VARCHAR},
+			t1.attribute_07                   =#{attribute07,jdbcType=DATE},
+			t1.attribute_08                   =#{attribute08,jdbcType=DATE},
+			t1.attribute_09                   =#{attribute09,jdbcType=DECIMAL},
+			t1.attribute_10                   =#{attribute10,jdbcType=DECIMAL},
+	where t1.id = #{id} and t1.version =#{version}
+</update>
+<!-- 主键删除 DISPUTE_MEMO -->
+<delete id="deleteDisputeMemoById" parameterType="java.lang.String">
+		delete from dispute_memo  where  id = #{id}
+</delete>
+</mapper>

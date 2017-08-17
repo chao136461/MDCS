@@ -1,0 +1,64 @@
+package avicit.discussion_manage.informationstatistics.service;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import avicit.discussion_manage.informationstatistics.dao.InformationStatisticsDao;
+import avicit.discussion_manage.structuremanage.dto.StructureManageDTO;
+import avicit.platform6.core.exception.DaoException;
+
+@Service
+public class InformationStatisticsService  implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger logger =  LoggerFactory.getLogger(InformationStatisticsService.class);
+
+	@Autowired
+	private InformationStatisticsDao informationStatisticsDao;
+	
+
+	/**
+	 * 查询零件  装配件相关讨论区的数量
+	 * @param queryReqBean
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String,Object>> searchStructureManage() throws Exception {
+		
+		try{
+			List<Map<String,Object>>  inforList =informationStatisticsDao.searchStructureManage();
+			return inforList;
+		}catch(DaoException e){
+			logger.error("searchStructureManage出错：", e);
+			throw e;
+		}
+	}
+	/**
+	 * 查询审查讨论  确认 完成数量
+	 * @return
+	 * @throws Exception
+	 */
+  public List<Map<String,Object>> searchAuditOpinion() throws Exception {
+		
+		try{
+			List<Map<String,Object>>  inforList =informationStatisticsDao.searchAuditOpinion();
+			return inforList;
+		}catch(DaoException e){
+			logger.error("searchAuditOpinion出错：", e);
+			throw e;
+		}
+	}
+
+}
+

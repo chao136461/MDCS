@@ -1,0 +1,210 @@
+package avicit.discussion_manage.structureDataSynchronize.ws.impl;
+
+
+import javax.jws.WebParam;
+import javax.jws.WebService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import avicit.discussion_manage.mdcsproposalpicture.service.MdcsProposalPictureService;
+import avicit.discussion_manage.modelInterveneCheck.service.SynchronousInterveneDataervice;
+import avicit.discussion_manage.modelQualityCheck.service.SynchronousQualityDataService;
+import avicit.discussion_manage.processassignment.service.ProcessAssignmentService;
+import avicit.discussion_manage.relevanceperson.service.RelevancePersonService;
+import avicit.discussion_manage.structureDataSynchronize.service.StructureDataSynchronizeService;
+import avicit.discussion_manage.structureDataSynchronize.util.EcodeChangeUtil;
+import avicit.discussion_manage.structureDataSynchronize.ws.StructureDataSynchronizeWsService;
+import avicit.platform6.core.exception.DaoException;
+
+@WebService(endpointInterface="avicit.discussion_manage.structureDataSynchronize.ws.StructureDataSynchronizeWsService")
+public class StructureDataSynchronizeWsServiceImpl implements StructureDataSynchronizeWsService{
+
+	private static final Logger logger =  LoggerFactory.getLogger(StructureDataSynchronizeWsServiceImpl.class);
+
+	@Autowired
+	private StructureDataSynchronizeService service;
+	@Autowired
+	private SynchronousInterveneDataervice InterveneService;
+	@Autowired
+	private SynchronousQualityDataService QualityService;
+	@Autowired
+	private ProcessAssignmentService assignmentService;
+	@Autowired
+	private  RelevancePersonService personservice;
+	@Autowired
+	private  MdcsProposalPictureService mdcsProposalPictureService;
+	@Override
+	public String getStructureData(String data) throws Exception{
+		if(null != data && !"".equals(data)){
+			String encode = EcodeChangeUtil.getEncoding(data);
+			String xmlData = new String(data.getBytes(encode),"gbk");
+			System.out.println(xmlData);
+			if(xmlData!=null){
+				service.updateStructureDataSynchronize(xmlData);
+			}
+			return "SUCCESS";
+		}else{
+			
+			return "NO DATA";
+		}
+	}
+	
+	/**
+	 * 获取干涉数据信息
+	 * @param String
+	 * @return String
+	 * author by heps
+	 * @throws Exception
+	 */
+	@Override
+	public String getInterveneData(String data){
+		try {
+			String result = "no data";
+			if(null == data || "".equals(data)){
+				return result;
+			}else{
+				data = EcodeChangeUtil.charSetConvert(data);
+				result = InterveneService.saveResolveInterveneXmlData(data);
+				if("success".equals(result)){
+					return result;
+				}else{
+					return result;
+				}
+			}
+		} catch (Exception e) {
+			logger.error("getInterveneData出错：",e);
+			return "xml data error";
+		}
+	}
+	
+	/**
+	 * 获取质量检查数据信息
+	 * @param String
+	 * @return String
+	 * author by heps
+	 * @throws Exception
+	 */
+	@Override
+	public String getQualityData(String data) throws Exception {
+		try {
+			String result = "no data";
+			if(null == data || "".equals(data)){
+				return result;
+			}else{
+				data = EcodeChangeUtil.charSetConvert(data);
+				if("success".equals(result)){
+					return result;
+				}
+			}
+			return "xml data error";
+		} catch (Exception e) {
+			logger.error("getInterveneData出错：",e);
+			throw new DaoException("",e);
+		}
+	}
+	/**
+	 * 根据用户名查找用户审查任务
+	 * @param String
+	 * @return String(**##**##**$$格式)
+	 * @throws Exception
+	 */
+	@Override
+	public String CheckMission(String userName) throws Exception {
+		String result="";
+		if (null!=userName&&!"".equals(userName)) {
+			String userId = personservice.getUserIdByUserName(userName);
+			if (null!=userId&&!"".equals(userId)) {
+				result = assignmentService.getAssignmentByuserId(userId);
+			}else{
+				result=userName+"not found";
+			}
+		}
+		result = EcodeChangeUtil.charSetConvert(result);
+		return result;
+	}
+	
+	/**
+	 * 保存建议发表截图信息
+	 * @param String proposalId
+	 * @param String saveAddress
+	 * @param String pictureOption
+	 * author by heps
+	 */
+	@Override
+	public String saveProposalPictureData(String proposalId,String saveAddress,String pictureOption){
+		String result = "failure";
+		try {
+			if(null == proposalId || "".equals(proposalId)){
+				return pictureOption + " is null";
+			}
+			if(null == saveAddress || "".equals(saveAddress)){
+				return saveAddress + " is null";
+			}
+			if(null == pictureOption || "".equals(pictureOption)){
+				return pictureOption + " is null";
+			}else{
+				result = mdcsProposalPictureService.saveProposalPictureData(proposalId,saveAddress,pictureOption);
+				return result;
+			}
+		} catch (Exception e) {
+			logger.error("saveProposalPictureData出错：",e);
+			return result;
+		}
+	}
+
+	
+	/**
+	 * 根据通过VPM登录名获取本系统登录名
+	 */
+	@Override
+	public String getSysUserName(String vpmLoginName) throws Exception {
+		String loginName="";
+		if(vpmLoginName!=null && !"".equals(vpmLoginName)){
+			loginName = personservice.findRelevancePersonByVpmLoginName(vpmLoginName);
+			// 这里填写你的网址  
+			String url = "http://10.216.70.205:8080/MDCS/login/login_check.jsp?user="+vpmLoginName;     
+			openURL(url);  
+		}else{
+			return "no data";
+		}
+		
+		return loginName;
+	}
+	//通过接口打开IE浏览器进入系统主页
+		public static void openURL(String url) {
+			try {
+				browse(url);
+			} catch (Exception e) {
+			}
+		}
+		private static void browse(String url) throws Exception {
+			// 获取操作系统的名字
+			String osName = System.getProperty("os.name", "");
+		 if (osName.startsWith("Windows")) {
+				// windows的打开方式。
+				Runtime.getRuntime().exec(
+						"rundll32 url.dll,FileProtocolHandler " + url);
+			} else {
+				// Unix or Linux的打开方式
+				String[] browsers = { "firefox", "opera", "konqueror", "epiphany",
+						"mozilla", "netscape" };
+				String browser = null;
+				for (int count = 0; count < browsers.length && browser == null; count++) {
+					// 执行代码，在brower有值后跳出，
+					// 这里是如果进程创建成功了，==0是表示正常结束。
+					if (Runtime.getRuntime()
+							.exec(new String[] { "which", browsers[count] })
+							.waitFor() == 0)
+						browser = browsers[count];
+					if (browser == null)
+						throw new Exception("Could not find web browser");
+					else
+						// 这个值在上面已经成功的得到了一个进程。
+						Runtime.getRuntime().exec(new String[] { browser, url });
+				}
+				// 主方法 测试类
+			}
+		}
+}

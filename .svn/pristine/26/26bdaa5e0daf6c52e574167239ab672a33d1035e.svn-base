@@ -1,0 +1,37 @@
+package avicit.discussion_manage.structureDataSynchronize.ws;
+
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebResult;
+import javax.jws.WebService;
+
+@WebService
+public interface StructureDataSynchronizeWsService {
+
+	
+	@WebMethod(operationName="getStructureData")
+	@WebResult(name="result")
+	public  String  getStructureData(@WebParam(name="data")String data)throws Exception;
+	
+	/**
+	 * 获取干涉数据信息
+	 * @param String
+	 * @return String
+	 * @throws Exception
+	 */
+	@WebMethod(operationName="getInterveneData")
+	@WebResult(name="result")
+	public  String  getInterveneData(@WebParam(name="data")String data)throws Exception;
+
+	/**
+	 * 获取质量检查数据信息
+	 * @param String
+	 * @return String
+	 * @throws Exception
+	 */
+	@WebMethod(operationName="getQualityData")
+	@WebResult(name="result")
+	public  String  getQualityData(@WebParam(name="data")String data)throws Exception;
+
+
+}

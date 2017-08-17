@@ -1,0 +1,98 @@
+package avicit.discussion_manage.structureDataSynchronize.ws.impl;
+
+
+import javax.jws.WebService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import avicit.discussion_manage.modelInterveneCheck.service.SynchronousInterveneDataervice;
+import avicit.discussion_manage.modelQualityCheck.service.SynchronousQualityDataService;
+import avicit.discussion_manage.structureDataSynchronize.service.StructureDataSynchronizeService;
+import avicit.discussion_manage.structureDataSynchronize.util.EcodeChangeUtil;
+import avicit.discussion_manage.structureDataSynchronize.ws.StructureDataSynchronizeWsService;
+import avicit.platform6.core.exception.DaoException;
+
+@WebService(endpointInterface="avicit.discussion_manage.structureDataSynchronize.ws.StructureDataSynchronizeWsService")
+public class StructureDataSynchronizeWsServiceImpl implements StructureDataSynchronizeWsService{
+
+	private static final Logger logger =  LoggerFactory.getLogger(StructureDataSynchronizeWsServiceImpl.class);
+
+	@Autowired
+	private StructureDataSynchronizeService service;
+	@Autowired
+	private SynchronousInterveneDataervice InterveneService;
+	@Autowired
+	private SynchronousQualityDataService QualityService;
+	
+	@Override
+	public String getStructureData(String data) throws Exception{
+		if(null != data && !"".equals(data)){
+			String encode = EcodeChangeUtil.getEncoding(data);
+			String xmlData = new String(data.getBytes(encode),"gbk");
+			System.out.println(xmlData);
+			if(xmlData!=null){
+				service.updateStructureDataSynchronize(xmlData);
+			}
+			return "SUCCESS";
+		}else{
+			
+			return "NO DATA";
+		}
+	}
+	
+	/**
+	 * 获取干涉数据信息
+	 * @param String
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String getInterveneData(String data) throws Exception {
+		try {
+			String result = "no data";
+			if(null == data || "".equals(data)){
+				return result;
+			}else{
+				data = EcodeChangeUtil.charSetConvert(data);
+				result = InterveneService.saveResolveInterveneXmlData(data);
+				if("success".equals(result)){
+					return result;
+				}
+				if(!"success".equals(result)){
+					return result;
+				}
+			}
+			return "xml data error";
+		} catch (Exception e) {
+			logger.error("getInterveneData出错：",e);
+			throw new DaoException("",e);
+		}
+	}
+	
+	/**
+	 * 获取质量检查数据信息
+	 * @param String
+	 * @return String
+	 * @throws Exception
+	 */
+	@Override
+	public String getQualityData(String data) throws Exception {
+		try {
+			String result = "no data";
+			if(null == data || "".equals(data)){
+				return result;
+			}else{
+				data = EcodeChangeUtil.charSetConvert(data);
+				if("success".equals(result)){
+					return result;
+				}
+			}
+			return "xml data error";
+		} catch (Exception e) {
+			logger.error("getInterveneData出错：",e);
+			throw new DaoException("",e);
+		}
+	}
+}

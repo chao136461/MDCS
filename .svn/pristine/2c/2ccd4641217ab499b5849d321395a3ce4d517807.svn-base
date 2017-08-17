@@ -1,0 +1,33 @@
+package avicit.discussion_manage.structureDataSynchronize.ws.impl;
+
+
+import javax.jws.WebService;
+
+import avicit.discussion_manage.structureDataSynchronize.util.EcodeChangeUtil;
+import avicit.discussion_manage.structureDataSynchronize.ws.StructureDataSynchronizeWsService;
+
+@WebService(endpointInterface="avicit.discussion_manage.structureDataSynchronize.ws.StructureDataSynchronizeWsService")
+public class StructureDataSynchronizeWsServiceImpl implements StructureDataSynchronizeWsService{
+
+
+	@Override
+	public String getStructureData(String data) throws Exception{
+		
+		System.out.println("data--------"+data);
+		
+		if(null != data && !"".equals(data)){
+			String encode = EcodeChangeUtil.getEncoding(data);
+			
+			String str = EcodeChangeUtil.charSetConvert(data);
+			
+			System.out.println(encode);
+			System.out.println(str);
+			
+			return "SUCCESS";
+			
+		}else{
+			
+			return "NO DATA";
+		}
+	}
+}

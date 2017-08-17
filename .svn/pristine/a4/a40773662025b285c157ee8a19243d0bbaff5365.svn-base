@@ -1,0 +1,55 @@
+package avicit.discussion_manage.modelInterveneCheck.ws.impl;
+
+
+import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
+
+
+import avicit.platform6.commons.utils.web.WsUtil;
+
+
+
+
+public class T {
+
+	/**
+	 * @param args
+	 * @throws Exception 
+	 */
+	public static void main(String[] args) throws Exception {
+
+		String data ="<?xml version='1.0' encoding='utf-8'?>\n" +
+						"<root>\n" + 
+						"  <infos>\n" + 
+						"    <jixing>MYZB</jixing>\n" + 
+						"  </infos>\n" + 
+						"  <Struct>\n" + 
+						"    <part>\n" + 
+						"      <partnumber>C919.HEAD.XXXX.0001.0001.0002.0001</partnumber>\n" + 
+						"      <instancenumber>C919.HEAD.XXXX.0001.0001.0001.1</instancenumber>\n" + 
+						"      <checktime>2014-4-21 10:15:38</checktime>\n" + 
+						"      <result>positive</result>\n" + 
+						"      <description>干涉内容wwwwwwwww</description>\n" + 
+						"    </part>\n" + 
+						"    <part>\n" + 
+						"      <partnumber>C919.HEAD.XXXX.0001.0001.0002.0002</partnumber>\n" + 
+						"      <instancenumber>C919.HEAD.XXXX.0001.0001.0002.1</instancenumber>\n" + 
+						"      <checktime>2014-4-21 10:15:38</checktime>\n" + 
+						"      <result>negative</result>\n" + 
+						"      <description>干涉内容</description>\n" + 
+						"    </part>\n" + 
+						"  </Struct>\n" + 
+						"</root>";
+
+		
+		String wsurl = "http://localhost:8080/MDCS/ws/structureDataSynchronizeWsService?wsdl";
+		JaxWsDynamicClientFactory dcf =  JaxWsDynamicClientFactory.newInstance();
+		org.apache.cxf.endpoint.Client client =  dcf.createClient(wsurl);
+//		javax.xml.namespace.QName   qName = WsUtil.getOperationName(client.getEndpoint(), "getInterveneData");
+//		javax.xml.namespace.QName   qName = WsUtil.getOperationName(client.getEndpoint(), "getStructureData");
+//		javax.xml.namespace.QName   qName = WsUtil.getOperationName(client.getEndpoint(), "CheckMission");
+		javax.xml.namespace.QName   qName = WsUtil.getOperationName(client.getEndpoint(), "getSysUserName");
+		Object[] obj =  client.invoke(qName, "tt");
+		System.out.println(obj[0].toString());
+	}
+
+}

@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="avicit.discussion_manage.profconfiguration.dao.ProfConfigurationDao">
+
+<resultMap id="ProfConfigurationDTOMap" type="avicit.discussion_manage.profconfiguration.dto.ProfConfigurationDTO">
+		<result property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="typeId" column="TYPE_ID" jdbcType="VARCHAR" />
+		<result property="category" column="CATEGORY" jdbcType="VARCHAR" />
+		<result property="profession" column="PROFESSION" jdbcType="VARCHAR" />
+		<result property="createdBy" column="CREATED_BY" jdbcType="VARCHAR" />
+		<result property="creationDate" column="CREATION_DATE" jdbcType="TIMESTAMP" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" jdbcType="VARCHAR" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" />
+		<result property="lastUpdateIp" column="LAST_UPDATE_IP" jdbcType="VARCHAR" />
+		<result property="version" column="VERSION" jdbcType="DECIMAL" />
+		<result property="attribute01" column="ATTRIBUTE_01" jdbcType="VARCHAR" />
+		<result property="attribute02" column="ATTRIBUTE_02" jdbcType="VARCHAR" />
+		<result property="attribute03" column="ATTRIBUTE_03" jdbcType="VARCHAR" />
+		<result property="attribute04" column="ATTRIBUTE_04" jdbcType="VARCHAR" />
+		<result property="attribute05" column="ATTRIBUTE_05" jdbcType="VARCHAR" />
+		<result property="attribute06" column="ATTRIBUTE_06" jdbcType="VARCHAR" />
+		<result property="attribute07" column="ATTRIBUTE_07" jdbcType="TIMESTAMP" />
+		<result property="attribute08" column="ATTRIBUTE_08" jdbcType="TIMESTAMP" />
+		<result property="attribute09" column="ATTRIBUTE_09" jdbcType="DECIMAL" />
+		<result property="attribute10" column="ATTRIBUTE_10" jdbcType="DECIMAL" />
+		<result property="scene" column="SCENE" jdbcType="VARCHAR" />
+		<result property="className" column="class_name" jdbcType="VARCHAR" />
+</resultMap>
+<!-- 分页查询 PROF_CONFIGURATION -->
+<select id="searchProfConfigurationByPage" parameterType="java.util.Map" resultMap="ProfConfigurationDTOMap">
+	select
+    t1.id                             ,
+    t1.type_id                        ,
+    t1.category                       ,
+    t1.profession                     ,
+    t1.created_by                     ,
+    t1.creation_date                  ,
+    t1.last_updated_by                ,
+    t1.last_update_date               ,
+    t1.last_update_ip                 ,
+    t1.version                        ,
+    t1.attribute_01                   ,
+    t1.attribute_02                   ,
+    t1.attribute_03                   ,
+    t1.attribute_04                   ,
+    t1.attribute_05                   ,
+    t1.attribute_06                   ,
+    t1.attribute_07                   ,
+    t1.attribute_08                   ,
+    t1.attribute_09                   ,
+    t1.attribute_10,
+    t1.scene ,
+    s.class_name                 
+  		from prof_configuration  t1 
+  
+  		left join STRUCTURE_MANAGE s
+  
+  		on t1.type_id = s.id
+	
+		<where>
+			<if test="bean != null">
+			<if test="bean.id != null and bean.id != ''">
+				and t1.ID like '%'||#{bean.id}||'%'
+			</if>
+			<if test="bean.typeId != null and bean.typeId != ''">
+				and t1.TYPE_ID like '%'||#{bean.typeId}||'%'
+			</if>
+			<if test="bean.category != null and bean.category != ''">
+				and t1.CATEGORY like '%'||#{bean.category}||'%'
+			</if>
+			<if test="bean.profession != null and bean.profession != ''">
+				and t1.PROFESSION like '%'||#{bean.profession}||'%'
+			</if>
+			<if test="bean.createdBy != null and bean.createdBy != ''">
+				and t1.CREATED_BY like '%'||#{bean.createdBy}||'%'
+			</if>
+			<if test="bean.creationDate != null and bean.creationDate != ''">
+				and t1.CREATION_DATE like '%'||#{bean.creationDate}||'%'
+			</if>
+			<if test="bean.lastUpdatedBy != null and bean.lastUpdatedBy != ''">
+				and t1.LAST_UPDATED_BY like '%'||#{bean.lastUpdatedBy}||'%'
+			</if>
+			<if test="bean.lastUpdateDate != null and bean.lastUpdateDate != ''">
+				and t1.LAST_UPDATE_DATE like '%'||#{bean.lastUpdateDate}||'%'
+			</if>
+			<if test="bean.lastUpdateIp != null and bean.lastUpdateIp != ''">
+				and t1.LAST_UPDATE_IP like '%'||#{bean.lastUpdateIp}||'%'
+			</if>
+			<if test="bean.version != null and bean.version != ''">
+				and t1.VERSION like '%'||#{bean.version}||'%'
+			</if>
+			<if test="bean.attribute01 != null and bean.attribute01 != ''">
+				and t1.ATTRIBUTE_01 like '%'||#{bean.attribute01}||'%'
+			</if>
+			<if test="bean.attribute02 != null and bean.attribute02 != ''">
+				and t1.ATTRIBUTE_02 like '%'||#{bean.attribute02}||'%'
+			</if>
+			<if test="bean.attribute03 != null and bean.attribute03 != ''">
+				and t1.ATTRIBUTE_03 like '%'||#{bean.attribute03}||'%'
+			</if>
+			<if test="bean.attribute04 != null and bean.attribute04 != ''">
+				and t1.ATTRIBUTE_04 like '%'||#{bean.attribute04}||'%'
+			</if>
+			<if test="bean.attribute05 != null and bean.attribute05 != ''">
+				and t1.ATTRIBUTE_05 like '%'||#{bean.attribute05}||'%'
+			</if>
+			<if test="bean.attribute06 != null and bean.attribute06 != ''">
+				and t1.ATTRIBUTE_06 like '%'||#{bean.attribute06}||'%'
+			</if>
+			<if test="bean.attribute07 != null and bean.attribute07 != ''">
+				and t1.ATTRIBUTE_07 like '%'||#{bean.attribute07}||'%'
+			</if>
+			<if test="bean.attribute08 != null and bean.attribute08 != ''">
+				and t1.ATTRIBUTE_08 like '%'||#{bean.attribute08}||'%'
+			</if>
+			<if test="bean.attribute09 != null and bean.attribute09 != ''">
+				and t1.ATTRIBUTE_09 like '%'||#{bean.attribute09}||'%'
+			</if>
+			<if test="bean.attribute10 != null and bean.attribute10 != ''">
+				and t1.ATTRIBUTE_10 like '%'||#{bean.attribute10}||'%'
+			</if>
+			<if test="bean.scene != null and bean.scene != ''">
+				and t1.SCENE like '%'||#{bean.scene}||'%'
+			</if>
+			</if>
+			<if test="sfnConditions != null and sfnConditions.sql != ''">
+				and ${sfnConditions.sql}			
+			</if>
+		</where>
+			order by t1.creation_date desc
+</select>
+<!-- 查询列表 PROF_CONFIGURATION -->
+<select id="searchProfConfiguration" parameterType="java.util.Map" resultMap="ProfConfigurationDTOMap">
+	select
+		t1.id                             ,
+		t1.type_id                        ,
+		t1.category                       ,
+		t1.profession                     ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10,
+		t1.scene                  
+	from prof_configuration 	t1
+		<where>
+			<if test="id != null and id != ''">
+				and t1.ID =#{id}
+			</if>
+			<if test="typeId != null and typeId != ''">
+				and t1.TYPE_ID =#{typeId}
+			</if>
+			<if test="category != null and category != ''">
+				and t1.CATEGORY =#{category}
+			</if>
+			<if test="profession != null and profession != ''">
+				and t1.PROFESSION =#{profession}
+			</if>
+			<if test="createdBy != null and createdBy != ''">
+				and t1.CREATED_BY =#{createdBy}
+			</if>
+			<if test="creationDate != null and creationDate != ''">
+				and t1.CREATION_DATE =#{creationDate}
+			</if>
+			<if test="lastUpdatedBy != null and lastUpdatedBy != ''">
+				and t1.LAST_UPDATED_BY =#{lastUpdatedBy}
+			</if>
+			<if test="lastUpdateDate != null and lastUpdateDate != ''">
+				and t1.LAST_UPDATE_DATE =#{lastUpdateDate}
+			</if>
+			<if test="lastUpdateIp != null and lastUpdateIp != ''">
+				and t1.LAST_UPDATE_IP =#{lastUpdateIp}
+			</if>
+			<if test="version != null and version != ''">
+				and t1.VERSION =#{version}
+			</if>
+			<if test="attribute01 != null and attribute01 != ''">
+				and t1.ATTRIBUTE_01 =#{attribute01}
+			</if>
+			<if test="attribute02 != null and attribute02 != ''">
+				and t1.ATTRIBUTE_02 =#{attribute02}
+			</if>
+			<if test="attribute03 != null and attribute03 != ''">
+				and t1.ATTRIBUTE_03 =#{attribute03}
+			</if>
+			<if test="attribute04 != null and attribute04 != ''">
+				and t1.ATTRIBUTE_04 =#{attribute04}
+			</if>
+			<if test="attribute05 != null and attribute05 != ''">
+				and t1.ATTRIBUTE_05 =#{attribute05}
+			</if>
+			<if test="attribute06 != null and attribute06 != ''">
+				and t1.ATTRIBUTE_06 =#{attribute06}
+			</if>
+			<if test="attribute07 != null and attribute07 != ''">
+				and t1.ATTRIBUTE_07 =#{attribute07}
+			</if>
+			<if test="attribute08 != null and attribute08 != ''">
+				and t1.ATTRIBUTE_08 =#{attribute08}
+			</if>
+			<if test="attribute09 != null and attribute09 != ''">
+				and t1.ATTRIBUTE_09 =#{attribute09}
+			</if>
+			<if test="attribute10 != null and attribute10 != ''">
+				and t1.ATTRIBUTE_10 =#{attribute10}
+			</if>
+			<if test="scene != null and scene != ''">
+				and t1.SCENE =#{scene}
+			</if>
+		</where>
+</select>
+<!-- 主键查询对象 PROF_CONFIGURATION -->
+<select id="findProfConfigurationById" parameterType="java.util.Map" resultMap="ProfConfigurationDTOMap">
+	select
+		t1.id                             ,
+		t1.type_id                        ,
+		t1.category                       ,
+		t1.profession                     ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10,
+		t1.scene ,
+		s.class_name                
+	from prof_configuration 	t1
+	
+		left join STRUCTURE_MANAGE s
+ 		on t1.type_id = s.id
+		where t1.id = #{id}
+</select>
+<!-- 通过typeId查询对象 PROF_CONFIGURATION -->
+<select id="findProfConfigurationByTypeId" parameterType="java.util.Map" resultMap="ProfConfigurationDTOMap">
+	select
+		t1.id                             ,
+		t1.type_id                        ,
+		t1.category                       ,
+		t1.profession                     ,
+		t1.created_by                     ,
+		t1.creation_date                  ,
+		t1.last_updated_by                ,
+		t1.last_update_date               ,
+		t1.last_update_ip                 ,
+		t1.version                        ,
+		t1.attribute_01                   ,
+		t1.attribute_02                   ,
+		t1.attribute_03                   ,
+		t1.attribute_04                   ,
+		t1.attribute_05                   ,
+		t1.attribute_06                   ,
+		t1.attribute_07                   ,
+		t1.attribute_08                   ,
+		t1.attribute_09                   ,
+		t1.attribute_10,
+		t1.scene                  
+	from prof_configuration 	t1
+		where t1.type_id = #{typeId}
+</select>
+<!-- 新增对象 PROF_CONFIGURATION -->
+<insert id="insertProfConfiguration" parameterType="avicit.discussion_manage.profconfiguration.dto.ProfConfigurationDTO">
+	insert into prof_configuration
+	<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="typeId != null">
+				type_id,
+			</if>
+			<if test="category != null">
+				category,
+			</if>
+			<if test="profession != null">
+				profession,
+			</if>
+			<if test="createdBy != null">
+				created_by,
+			</if>
+			<if test="creationDate != null">
+				creation_date,
+			</if>
+			<if test="lastUpdatedBy != null">
+				last_updated_by,
+			</if>
+			<if test="lastUpdateDate != null">
+				last_update_date,
+			</if>
+			<if test="lastUpdateIp != null">
+				last_update_ip,
+			</if>
+			<if test="version != null">
+				version,
+			</if>
+			<if test="attribute01 != null">
+				attribute_01,
+			</if>
+			<if test="attribute02 != null">
+				attribute_02,
+			</if>
+			<if test="attribute03 != null">
+				attribute_03,
+			</if>
+			<if test="attribute04 != null">
+				attribute_04,
+			</if>
+			<if test="attribute05 != null">
+				attribute_05,
+			</if>
+			<if test="attribute06 != null">
+				attribute_06,
+			</if>
+			<if test="attribute07 != null">
+				attribute_07,
+			</if>
+			<if test="attribute08 != null">
+				attribute_08,
+			</if>
+			<if test="attribute09 != null">
+				attribute_09,
+			</if>
+			<if test="attribute10 != null">
+				attribute_10,
+			</if>
+			<if test="scene != null">
+				scene,
+			</if>
+	</trim>
+	<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				#{typeId,jdbcType=VARCHAR},
+			</if>
+			<if test="category != null">
+				#{category,jdbcType=VARCHAR},
+			</if>
+			<if test="profession != null">
+				#{profession,jdbcType=VARCHAR},
+			</if>
+			<if test="createdBy != null">
+				#{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="creationDate != null">
+				#{creationDate},
+			</if>
+			<if test="lastUpdatedBy != null">
+				#{lastUpdatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateDate != null">
+				#{lastUpdateDate},
+			</if>
+			<if test="lastUpdateIp != null">
+				#{lastUpdateIp,jdbcType=VARCHAR},
+			</if>
+			<if test="version != null">
+				#{version,jdbcType=DECIMAL},
+			</if>
+			<if test="attribute01 != null">
+				#{attribute01,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute02 != null">
+				#{attribute02,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute03 != null">
+				#{attribute03,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute04 != null">
+				#{attribute04,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute05 != null">
+				#{attribute05,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute06 != null">
+				#{attribute06,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute07 != null">
+				#{attribute07,jdbcType=DATE},
+			</if>
+			<if test="attribute08 != null">
+				#{attribute08,jdbcType=DATE},
+			</if>
+			<if test="attribute09 != null">
+				#{attribute09,jdbcType=DECIMAL},
+			</if>
+			<if test="attribute10 != null">
+				#{attribute10,jdbcType=DECIMAL},
+			</if>
+			<if test="scene != null">
+				#{scene,jdbcType=VARCHAR},
+			</if>
+	</trim>
+</insert>
+<!-- 更新对象 PROF_CONFIGURATION -->
+<update id="updateProfConfigurationSensitive" parameterType="avicit.discussion_manage.profconfiguration.dto.ProfConfigurationDTO">
+	update prof_configuration t1
+	<set>
+			<if test="id != null">
+				t1.id                             =#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="typeId != null">
+				t1.type_id                        =#{typeId,jdbcType=VARCHAR},
+			</if>
+			<if test="category != null">
+				t1.category                       =#{category,jdbcType=VARCHAR},
+			</if>
+			<if test="profession != null">
+				t1.profession                     =#{profession,jdbcType=VARCHAR},
+			</if>
+			<if test="createdBy != null">
+				t1.created_by                     =#{createdBy,jdbcType=VARCHAR},
+			</if>
+			<if test="creationDate != null">
+				t1.creation_date                  =#{creationDate},
+			</if>
+			<if test="lastUpdatedBy != null">
+				t1.last_updated_by                =#{lastUpdatedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="lastUpdateDate != null">
+				t1.last_update_date               =#{lastUpdateDate},
+			</if>
+			<if test="lastUpdateIp != null">
+				t1.last_update_ip                 =#{lastUpdateIp,jdbcType=VARCHAR},
+			</if>
+			<if test="version != null">
+				t1.version                        =t1.version+1,
+			</if>
+			<if test="attribute01 != null">
+				t1.attribute_01                   =#{attribute01,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute02 != null">
+				t1.attribute_02                   =#{attribute02,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute03 != null">
+				t1.attribute_03                   =#{attribute03,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute04 != null">
+				t1.attribute_04                   =#{attribute04,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute05 != null">
+				t1.attribute_05                   =#{attribute05,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute06 != null">
+				t1.attribute_06                   =#{attribute06,jdbcType=VARCHAR},
+			</if>
+			<if test="attribute07 != null">
+				t1.attribute_07                   =#{attribute07,jdbcType=DATE},
+			</if>
+			<if test="attribute08 != null">
+				t1.attribute_08                   =#{attribute08,jdbcType=DATE},
+			</if>
+			<if test="attribute09 != null">
+				t1.attribute_09                   =#{attribute09,jdbcType=DECIMAL},
+			</if>
+			<if test="attribute10 != null">
+				t1.attribute_10                   =#{attribute10,jdbcType=DECIMAL},
+			</if>
+			<if test="scene != null">
+				t1.scene                   =#{scene,jdbcType=VARCHAR},
+			</if>
+	</set>
+		where t1.id = #{id} and t1.version =#{version}
+</update>
+<!-- 更新对象 PROF_CONFIGURATION -->
+<update id="updateProfConfigurationAll" parameterType="avicit.discussion_manage.profconfiguration.dto.ProfConfigurationDTO">
+	update prof_configuration t1
+		set
+			t1.id                             =#{id,jdbcType=VARCHAR},
+			t1.type_id                        =#{typeId,jdbcType=VARCHAR},
+			t1.category                       =#{category,jdbcType=VARCHAR},
+			t1.profession                     =#{profession,jdbcType=VARCHAR},
+			t1.created_by                     =#{createdBy,jdbcType=VARCHAR},
+			t1.creation_date                  =#{creationDate},
+			t1.last_updated_by                =#{lastUpdatedBy,jdbcType=VARCHAR},
+			t1.last_update_date               =#{lastUpdateDate},
+			t1.last_update_ip                 =#{lastUpdateIp,jdbcType=VARCHAR},
+			t1.version                        =t1.version+1,
+			t1.attribute_01                   =#{attribute01,jdbcType=VARCHAR},
+			t1.attribute_02                   =#{attribute02,jdbcType=VARCHAR},
+			t1.attribute_03                   =#{attribute03,jdbcType=VARCHAR},
+			t1.attribute_04                   =#{attribute04,jdbcType=VARCHAR},
+			t1.attribute_05                   =#{attribute05,jdbcType=VARCHAR},
+			t1.attribute_06                   =#{attribute06,jdbcType=VARCHAR},
+			t1.attribute_07                   =#{attribute07,jdbcType=DATE},
+			t1.attribute_08                   =#{attribute08,jdbcType=DATE},
+			t1.attribute_09                   =#{attribute09,jdbcType=DECIMAL},
+			t1.attribute_10                   =#{attribute10,jdbcType=DECIMAL},
+			t1.scene                  		  =#{scene,jdbcType=VARCHAR},
+	where t1.id = #{id} and t1.version =#{version}
+</update>
+<!-- 主键删除 PROF_CONFIGURATION -->
+<delete id="deleteProfConfigurationById" parameterType="java.lang.String">
+		delete from prof_configuration  where  id = #{id}
+</delete>
+</mapper>

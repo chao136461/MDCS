@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="avicit.discussion_manage.structuralrelationship.dao.StructuralRelationshipDao">
+
+<resultMap id="StructuralRelationshipDTOMap" type="avicit.discussion_manage.structuralrelationship.dto.StructuralRelationshipDTO">
+		<result property="id" column="ID" jdbcType="VARCHAR" />
+		<result property="strId" column="STR_ID" jdbcType="VARCHAR" />
+		<result property="parentStrId" column="PARENT_STR_ID" jdbcType="VARCHAR" />
+		<result property="instanceId" column="INSTANCE_ID" jdbcType="VARCHAR" />
+		<result property="createdBy" column="CREATED_BY" jdbcType="VARCHAR" />
+		<result property="creationDate" column="CREATION_DATE" jdbcType="TIMESTAMP" />
+		<result property="lastUpdatedBy" column="LAST_UPDATED_BY" jdbcType="VARCHAR" />
+		<result property="lastUpdateDate" column="LAST_UPDATE_DATE" jdbcType="TIMESTAMP" />
+		<result property="lastUpdateIp" column="LAST_UPDATE_IP" jdbcType="VARCHAR" />
+		<result property="version" column="VERSION" jdbcType="DECIMAL" />
+		<result property="attribute01" column="ATTRIBUTE_01" jdbcType="VARCHAR" />
+		<result property="attribute02" column="ATTRIBUTE_02" jdbcType="VARCHAR" />
+		<result property="attribute03" column="ATTRIBUTE_03" jdbcType="VARCHAR" />
+		<result property="attribute04" column="ATTRIBUTE_04" jdbcType="VARCHAR" />
+		<result property="attribute05" column="ATTRIBUTE_05" jdbcType="VARCHAR" />
+		<result property="attribute06" column="ATTRIBUTE_06" jdbcType="VARCHAR" />
+		<result property="attribute07" column="ATTRIBUTE_07" jdbcType="TIMESTAMP" />
+		<result property="attribute08" column="ATTRIBUTE_08" jdbcType="TIMESTAMP" />
+		<result property="attribute09" column="ATTRIBUTE_09" jdbcType="DECIMAL" />
+		<result property="attribute10" column="ATTRIBUTE_10" jdbcType="DECIMAL" />
+</resultMap>
+
+<resultMap id="AddFormDataDTOMap" type="avicit.discussion_manage.structuralrelationship.dto.AddFormDataDTO">
+		<result property="id" 	     column="ID" 		 jdbcType="VARCHAR" />
+		<result property="className" column="CLASS_NAME" jdbcType="VARCHAR" />
+		<result property="classCode" column="CLASS_CODE" jdbcType="VARCHAR" />
+		<result property="classType" column="CLASS_TYPE" jdbcType="VARCHAR" />
+		<result property="version"   column="VERSION" 	 jdbcType="DECIMAL" />
+		<result property="status"    column="STATUS" 	 jdbcType="DECIMAL" />
+		<result property="edition"   column="EDITION" 	 jdbcType="DECIMAL" />
+		<result property="designerId"   column="DESIGNER_ID" 	 jdbcType="DECIMAL" />
+</resultMap>
+
+<resultMap id="StructuralRelationshipMap" type="java.util.HashMap">
+	<result property="id"          column="ID" jdbcType="VARCHAR" />
+	<result property="StrId"       column="STR_ID" jdbcType="VARCHAR" />
+	<result property="ClassCode"   column="CLASS_CODE" jdbcType="VARCHAR" />
+	<result property="ParentStrId" column="PARENT_STR_ID" jdbcType="VARCHAR" />
+	<result property="childCount"  column="childCount" jdbcType="VARCHAR" />
+</resultMap>
+
+<!-- 初始化vci树 -->
+<select id="getStructuralRelationshipByParentStrId" parameterType="java.lang.String" resultMap="StructuralRelationshipMap">
+  SELECT (SELECT COUNT(1) FROM STRUCTURAL_RELATIONSHIP T1 WHERE SR.STR_ID = T1.PARENT_STR_ID) CHILDCOUNT,
+ 		SM.CLASS_CODE,
+ 		SM.CLASS_NAME,
+        SR.STR_ID,
+        SR.PARENT_STR_ID,
+        SR.ID
+  FROM STRUCTURAL_RELATIONSHIP SR
+  LEFT JOIN STRUCTURE_MANAGE SM
+  ON SR.STR_ID = SM.ID
+ where SR.PARENT_STR_ID = #{id,jdbcType=VARCHAR} 
+</select>
+
+<!-- 查询vcis -->
+<select id="getZtreeStructuralRelationshipBySerchData" parameterType="avicit.discussion_manage.structuralrelationship.dto.AddFormDataDTO" resultMap="StructuralRelationshipMap">
+
+	SELECT (SELECT COUNT(1) FROM STRUCTURAL_RELATIONSHIP T1 WHERE SR.STR_ID = T1.PARENT_STR_ID) CHILDCOUNT,
+        SM.CLASS_CODE,
+        SM.CLASS_NAME,
+        SR.STR_ID,
+        SR.PARENT_STR_ID,
+        SR.ID
+   FROM STRUCTURAL_RELATIONSHIP SR
+   LEFT JOIN STRUCTURE_MANAGE SM
+     ON SR.STR_ID = SM.ID
+  WHERE (SM.CLASS_NAME LIKE '%'|| #{bean.className,jdbcType=VARCHAR}||'%' 
+     AND SM.CLASS_CODE LIKE '%'|| #{bean.classCode,jdbcType=VARCHAR}||'%')
+     AND SR.PARENT_STR_ID = '-1'
+
+</select>
+
+
+<!-- 调包新增对象    -->
+<select id="insertStructuralRelationship"  statementType="CALLABLE"  parameterType="avicit.discussion_manage.structuralrelationship.dto.AddFormDataDTO"  resultType="java.util.Map">
+	<![CDATA[
+          {call mdcs_str_p.add_str_p(
+		      #{tabId,			jdbcType=VARCHAR,	mode=IN},
+		      #{id,				jdbcType=VARCHAR,	mode=IN},
+		      #{pId,			jdbcType=VARCHAR,	mode=IN},
+		      #{classType,		jdbcType=VARCHAR,	mode=IN}, 
+		      #{className,		jdbcType=VARCHAR,	mode=IN},  
+		      #{classCode,		jdbcType=VARCHAR,	mode=IN},
+		      #{designerId,		jdbcType=VARCHAR,	mode=IN},  
+		      #{addType,		jdbcType=VARCHAR,	mode=IN},
+		      #{edition,		jdbcType=VARCHAR,	mode=IN},
+		      #{status,			jdbcType=VARCHAR,	mode=IN},
+		      #{lastUpdateIp,	jdbcType=VARCHAR,	mode=IN},
+		      #{returnInt,   	jdbcType=INTEGER,   mode=OUT},
+			  #{returnString,	jdbcType=VARCHAR,   mode=OUT}) 
+     	 }
+     ]]>  
+      
+</select>
+
+<!-- 根据零件ID查寻数据-->
+<select id="getAddformDataDTOById" parameterType="java.lang.String" resultMap="AddFormDataDTOMap">
+  select id, class_name, class_code, class_type,version,status,edition,designer_id from structure_manage  where id = #{id,jdbcType=VARCHAR}
+</select> 
+
+<!-- 根据零件ID查寻数据-->
+<select id="getDgStructuralRelationship" parameterType="java.lang.String" resultMap="AddFormDataDTOMap">
+  select id, class_name, class_code, class_type,version,status,edition,designer_id from structure_manage  where id = #{id,jdbcType=VARCHAR}
+</select> 
+
+<resultMap id="ResultMap" type="java.util.HashMap">
+	<result property="returnInt"     column="O_RETURN_INT" 	   jdbcType="DECIMAL" />
+	<result property="returnString"  column="O_RETURN_STRING"  jdbcType="VARCHAR" />
+</resultMap>
+
+<!-- 调包更新数据    -->
+<select id="updateStructureManage"  statementType="CALLABLE"  parameterType="avicit.discussion_manage.structuralrelationship.dto.AddFormDataDTO"  resultMap="ResultMap">
+	<![CDATA[
+          {call mdcs_str_p.update_str_p(
+		      #{id,				jdbcType=VARCHAR,	mode=IN},
+		      #{classType,		jdbcType=VARCHAR,	mode=IN}, 
+		      #{className,		jdbcType=VARCHAR,	mode=IN},  
+		      #{classCode,		jdbcType=VARCHAR,	mode=IN},
+		      #{edition,		jdbcType=VARCHAR,	mode=IN},  
+		      #{status,			jdbcType=VARCHAR,	mode=IN},  
+		      #{returnInt,   	jdbcType=INTEGER,   mode=OUT},
+			  #{returnString,	jdbcType=VARCHAR,   mode=OUT}) 
+     	 }
+     ]]>  
+</select>
+
+<!-- 调包根据主键删除零件 -->
+<select id="deleteStructureManage"  statementType="CALLABLE"  parameterType="java.util.HashMap"  resultMap="ResultMap">
+	<![CDATA[
+          {call mdcs_str_p.del_str_p(
+		      #{id,				jdbcType=VARCHAR,	mode=IN},
+		      #{pId,			jdbcType=VARCHAR,	mode=IN}, 
+		      #{returnInt,   	jdbcType=INTEGER,   mode=OUT},
+			  #{returnString,	jdbcType=VARCHAR,   mode=OUT}) 
+     	 }
+     ]]>  
+</select>
+<!-- 查询零件ID-->
+<select id="getStrIdByCode" parameterType="java.lang.String" resultType="java.lang.String">
+  SELECT
+ SR.STR_ID
+  FROM STRUCTURAL_RELATIONSHIP SR
+  LEFT JOIN STRUCTURE_MANAGE SM
+    ON SR.STR_ID = SM.ID
+ START WITH SR.STR_ID =(SELECT T.ID FROM STL_INSTANCE T WHERE T.CODE = #{code})
+CONNECT BY PRIOR SR.STR_ID = SR.PARENT_STR_ID
+</select> 
+
+<!-- 判断用户添加的零件是否存在 -->
+<select id="findStrIsHasByclassCodeNew"    parameterType="java.lang.String"  resultMap="AddFormDataDTOMap">
+
+	SELECT ID, CLASS_NAME, CLASS_CODE, CLASS_TYPE,EDITION 
+		FROM MDCS.STRUCTURE_MANAGE 
+			WHERE CLASS_CODE = #{classCodeNew,jdbcType=VARCHAR}
+	
+</select>
+
+<!-- 保存拖拽后的数据结构 -->
+<select id="toSaveDragNode"   statementType="CALLABLE"  parameterType="java.util.HashMap" >
+	<![CDATA[
+          {call mdcs_str_p.save_drag_node(
+		      #{targetNodePid,	jdbcType=VARCHAR,	mode=IN},
+		      #{tabId,			jdbcType=VARCHAR,	mode=IN}, 
+		      #{returnInt,   	jdbcType=INTEGER,   mode=OUT},
+			  #{returnString,	jdbcType=VARCHAR,   mode=OUT}) 
+     	 }
+     ]]>  
+</select>
+
+</mapper>
